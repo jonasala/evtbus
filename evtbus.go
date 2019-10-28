@@ -8,13 +8,20 @@ type Event struct {
 	Data  interface{}
 }
 
-//EventChannel aliases a chan<- Event
-type EventChannel chan<- Event
+//EventChannel aliases a chan Event
+type EventChannel chan Event
 
 //EventBus stores the subscribers of a topic
 type EventBus struct {
 	subscribers map[string][]EventChannel
 	rm          sync.RWMutex
+}
+
+//New creates an EventBus with empty map of subscribers
+func New() *EventBus {
+	return &EventBus{
+		subscribers: map[string][]EventChannel{},
+	}
 }
 
 //Subscribe an EventChannel to a topic. When an Event is published all channels will receive it.
